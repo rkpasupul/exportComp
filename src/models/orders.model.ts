@@ -1,6 +1,7 @@
 import {Entity, belongsTo, model, property, hasMany} from '@loopback/repository';
 import {Distributor} from './distributor.model';
 import {OrderLine} from './order-line.model';
+import {Product} from './product.model';
 
 @model({
   settings: {
@@ -48,6 +49,9 @@ export class Orders extends Entity {
 
   @hasMany(() => OrderLine, {keyTo: 'orderId'})
   orderLines: OrderLine[];
+
+  @hasMany(() => Product, {through: {model: () => OrderLine, keyFrom: 'orderId'}})
+  products: Product[];
   @belongsTo(() => Distributor)
   distributorId: number;
   @property({

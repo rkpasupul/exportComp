@@ -1,19 +1,18 @@
 import {
   Count,
   CountSchema,
-  Filter,
   FilterExcludingWhere,
-  repository,
   Where,
+  repository
 } from '@loopback/repository';
 import {
-  post,
-  param,
+  del,
   get,
   getModelSchemaRef,
+  param,
   patch,
+  post,
   put,
-  del,
   requestBody,
   response,
 } from '@loopback/rest';
@@ -23,8 +22,8 @@ import {OrdersRepository} from '../repositories';
 export class OrderController {
   constructor(
     @repository(OrdersRepository)
-    public ordersRepository : OrdersRepository,
-  ) {}
+    public ordersRepository: OrdersRepository,
+  ) { }
 
   @post('/order')
   @response(200, {
@@ -58,23 +57,23 @@ export class OrderController {
     return this.ordersRepository.count(where);
   }
 
-  @get('/order')
-  @response(200, {
-    description: 'Array of Orders model instances',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'array',
-          items: getModelSchemaRef(Orders, {includeRelations: true}),
-        },
-      },
-    },
-  })
-  async find(
-    @param.filter(Orders) filter?: Filter<Orders>,
-  ): Promise<Orders[]> {
-    return this.ordersRepository.find(filter);
-  }
+  /* @get('/order')
+   @response(200, {
+     description: 'Array of Orders model instances',
+     content: {
+       'application/json': {
+         schema: {
+           type: 'array',
+           items: getModelSchemaRef(Orders, {includeRelations: true}),
+         },
+       },
+     },
+   })
+   async find(
+     @param.filter(Orders) filter?: Filter<Orders>,
+   ): Promise<Orders[]> {
+     return this.ordersRepository.find(filter);
+   }*/
 
   @patch('/order')
   @response(200, {
@@ -95,7 +94,7 @@ export class OrderController {
     return this.ordersRepository.updateAll(orders, where);
   }
 
-  @get('/order/{id}')
+  @get('/order/{id}-distributor-product-name')
   @response(200, {
     description: 'Orders model instance',
     content: {
@@ -108,8 +107,51 @@ export class OrderController {
     @param.path.number('id') id: number,
     @param.filter(Orders, {exclude: 'where'}) filter?: FilterExcludingWhere<Orders>
   ): Promise<Orders> {
+    return this.ordersRepository.findById(id,
+      {
+        "fields": ["id", "orderDate", "distributorId", "orderStatus"],
+        "include": [{
+          "relation":
+            "orderLines",
+          "scope": {
+            "fields": ["orderId", "productId", "quantity"],
+            "include": [{
+              "relation": "product",
+              "scope": {
+                "fields": ["name", "price"]
+              }
+            }
+            ]
+          }
+        },
+        {
+          "relation": "distributor",
+          "scope": {
+            "fields": ["firstName", "lastName"],
+            "include": [{"relation": "address"}]
+          }
+        }
+        ]
+      });
+  }
+
+  @get('/order/{id}')
+  @response(200, {
+    description: 'Orders model instance',
+    content: {
+      'application/json': {
+        schema: getModelSchemaRef(Orders, {includeRelations: true}),
+      },
+    },
+  })
+  async find(
+    @param.path.number('id') id: number,
+    @param.filter(Orders, {exclude: 'where'}) filter?: FilterExcludingWhere<Orders>
+  ): Promise<Orders> {
     return this.ordersRepository.findById(id, filter);
   }
+
+
 
   @patch('/order/{id}')
   @response(204, {
@@ -146,5 +188,9 @@ export class OrderController {
   })
   async deleteById(@param.path.number('id') id: number): Promise<void> {
     await this.ordersRepository.deleteById(id);
+  }
+  @get('/order/distributor-product-name/{id}')
+  async orderDisProdName(@param.path.number('id') id: number): Promise<{first_name: string, last_name: string, order_date: number, order_status: string, quantity: number, name: string}> {
+    return this.ordersRepository.orderDisProdName(id);
   }
 }

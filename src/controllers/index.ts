@@ -20,3 +20,4 @@ export * from './userroles.controller';
 export * from './roles.controller';
 export * from './users-userroles.controller';
 export * from './userroles-roles.controller';
+export * from './orders-product.controller';
