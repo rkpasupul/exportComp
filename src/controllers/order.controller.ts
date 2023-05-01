@@ -189,8 +189,8 @@ export class OrderController {
   async deleteById(@param.path.number('id') id: number): Promise<void> {
     await this.ordersRepository.deleteById(id);
   }
-  @get('/order/distributor-product-name/{id}')
-  async orderDisProdName(@param.path.number('id') id: number): Promise<{first_name: string, last_name: string, order_date: number, order_status: string, quantity: number, name: string}> {
-    return this.ordersRepository.orderDisProdName(id);
-  }
+  /*   @get('/order/distributor-product-name/{id}')
+    async orderDisProdName(@param.path.number('id') id: number): Promise<{first_name: string, last_name: string, order_date: number, order_status: string, quantity: number, name: string}> {
+      return this.ordersRepository.orderDisProdName(id);
+    } */
 }
