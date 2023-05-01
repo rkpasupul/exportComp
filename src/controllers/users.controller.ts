@@ -7,13 +7,13 @@ import {
   Where,
 } from '@loopback/repository';
 import {
-  post,
-  param,
+  del,
   get,
   getModelSchemaRef,
+  param,
   patch,
+  post,
   put,
-  del,
   requestBody,
   response,
 } from '@loopback/rest';
@@ -23,8 +23,8 @@ import {UsersRepository} from '../repositories';
 export class UsersController {
   constructor(
     @repository(UsersRepository)
-    public usersRepository : UsersRepository,
-  ) {}
+    public usersRepository: UsersRepository,
+  ) { }
 
   @post('/users')
   @response(200, {
@@ -110,6 +110,22 @@ export class UsersController {
   ): Promise<Users> {
     return this.usersRepository.findById(id, filter);
   }
+
+  /*   @get('/users-all-info/{id}')
+    @response(200, {
+      description: 'Users model instance',
+      content: {
+        'application/json': {
+          schema: getModelSchemaRef(Users, {includeRelations: true}),
+        },
+      },
+    })
+    async findByIdAll(
+      @param.path.number('id') id: number,
+      @param.filter(Users, {exclude: 'where'}) filter?: FilterExcludingWhere<Users>
+    ): Promise<Users> {
+      return this.usersRepository.findById(id, {"include": [{"relation": "roles"}]});
+    } */
 
   @patch('/users/{id}')
   @response(204, {

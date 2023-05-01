@@ -1,5 +1,6 @@
 import {Entity, model, property, hasMany} from '@loopback/repository';
 import {Userroles} from './userroles.model';
+import {Roles} from './roles.model';
 
 @model({settings: {idInjection: false, mysql: {schema: 'expcom', table: 'users'}}})
 export class Users extends Entity {
@@ -42,6 +43,9 @@ export class Users extends Entity {
 
   @hasMany(() => Userroles, {keyTo: 'userId'})
   userroles: Userroles[];
+
+  @hasMany(() => Roles, {through: {model: () => Userroles, keyFrom: 'userId', keyTo: 'roleId'}})
+  roles: Roles[];
   // Define well-known properties here
 
   // Indexer property to allow additional data

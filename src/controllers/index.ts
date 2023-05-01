@@ -21,3 +21,4 @@ export * from './roles.controller';
 export * from './users-userroles.controller';
 export * from './userroles-roles.controller';
 export * from './orders-product.controller';
+export * from './users-roles.controller';
