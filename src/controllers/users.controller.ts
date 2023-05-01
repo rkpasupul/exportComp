@@ -111,6 +111,28 @@ export class UsersController {
     return this.usersRepository.findById(id, filter);
   }
 
+  @get('/users/{username}/{password}')
+  @response(200, {
+    description: 'Users model instance',
+    content: {
+      'application/json': {
+        schema: getModelSchemaRef(Users, {includeRelations: true}),
+      },
+    },
+  })
+  async findByNames(
+    @param.path.string('username') username: string,
+    @param.path.string('password') password: string | number,
+    @param.filter(Users, {exclude: 'where'}) filter?: FilterExcludingWhere<Users>
+  ): Promise<Users | null> {
+    return this.usersRepository.findOne({
+      where: {
+        username,
+        password,
+      }, ...{"include": [{"relation": "roles"}]}/* ...filter */
+    });
+  }
+
   /*   @get('/users-all-info/{id}')
     @response(200, {
       description: 'Users model instance',
