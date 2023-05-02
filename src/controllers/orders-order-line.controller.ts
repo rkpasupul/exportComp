@@ -45,23 +45,7 @@ export class OrdersOrderLineController {
     return this.ordersRepository.orderLines(id).find(filter);
   }
 
-  /* @get('/order/{id}-distributor-product-name')
-   @response(200, {
-     description: 'Orders model instance',
-     content: {
-       'application/json': {
-         schema: getModelSchemaRef(Orders, {includeRelations: true}),
-       },
-     },
-   })
-   async findById(
-     @param.path.number('id') id: number,
-     @param.filter(Orders, {exclude: 'where'}) filter?: FilterExcludingWhere<Orders>
-   ): Promise<Orders> {
-     return this.ordersRepository.findById(id, {
-       "include": [{"relation": "orderLines", "scope": {"include": [{"relation": "product", "scope": {"fields": ["name", "price"]}}]}}, {"relation": "distributor", "scope": {"fields": ["firstName", "lastName"], "include": [{"relation": "address"}]}}]
-     });
-   }*/
+  
 
   @post('/orders/{id}/order-lines', {
     responses: {
@@ -125,8 +109,5 @@ export class OrdersOrderLineController {
   ): Promise<Count> {
     return this.ordersRepository.orderLines(id).delete(where);
   }
-  /*@get('/order/distributor-product-name/{id}')
-  async orderDisProdName(@param.path.number('id') id: number): Promise<{first_name: string, last_name: string, order_date: number, order_status: string, quantity: number, name: string}> {
-    return this.ordersRepository.orderDisProdName(id);
-  }*/
+
 }
