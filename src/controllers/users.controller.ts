@@ -133,21 +133,7 @@ export class UsersController {
     });
   }
 
-  /*   @get('/users-all-info/{id}')
-    @response(200, {
-      description: 'Users model instance',
-      content: {
-        'application/json': {
-          schema: getModelSchemaRef(Users, {includeRelations: true}),
-        },
-      },
-    })
-    async findByIdAll(
-      @param.path.number('id') id: number,
-      @param.filter(Users, {exclude: 'where'}) filter?: FilterExcludingWhere<Users>
-    ): Promise<Users> {
-      return this.usersRepository.findById(id, {"include": [{"relation": "roles"}]});
-    } */
+  
 
   @patch('/users/{id}')
   @response(204, {
